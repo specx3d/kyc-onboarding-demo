@@ -1,4 +1,4 @@
-"""KYC pipeline: OCR -> extraction -> validation -> screening -> triage -> overall status.
+"""KYC pipeline: image reading (vision LLM) -> extraction -> validation -> screening -> triage -> overall status.
 
 CLI: python -m kyc.pipeline <image> [--mock]
 """
@@ -59,7 +59,7 @@ def process(path, mock=False, today=None, watchlist=None, procedure=None):
         h["rules"] = screening.procedure_rules(h)
         h["triage"] = triage.triage_hit(ex, h, h["rules"], procedure, mock)
     models = ({"ocr": "mock-ocr", "llm": "mock-llm", "mode": "mock"} if mock else
-              {"ocr": llm.OCR_MODEL, "llm": llm.LLM_MODEL, "mode": "live"})
+              {"ocr": "none (vision LLM reads the image)", "llm": llm.LLM_MODEL, "mode": "live"})
     return {"filename": path.name, "mode": models["mode"], "models": models,
             "doc_type": "TD3" if len(ex.get("mrz_lines") or []) == 2 else "TD1", "ocr_text": ocr_text,
             "extracted": ex, "checks": checks, "issues": issues, "hits": hits,

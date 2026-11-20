@@ -3,3 +3,4 @@ data/runtime/
 *.db
 __pycache__/
 *.pyc
+results/_*.log

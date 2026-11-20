@@ -138,5 +138,27 @@ class TestHelpers(unittest.TestCase):
         self.assertEqual(c["mrz_format"], "fail")
 
 
+class TestMrzNormalization(unittest.TestCase):
+    def test_pads_dropped_trailing_fillers(self):
+        from kyc.extract import normalize_mrz
+        # a real gemma4-12b reply: each TD1 line came back one '<' short
+        got = normalize_mrz(["I<SRBRS00482155<<<<<<<<<<<<<<", "7105236M3012017SRB<<<<<<<<<<6",
+                             "DRAGOMIROVIC<<MILOS <<<<<<<<<<"])
+        self.assertEqual([len(x) for x in got], [30, 30, 30])
+        self.assertEqual(got[1], "7105236M3012017SRB<<<<<<<<<<<6")  # check digit stays last
+        self.assertTrue(got[2].startswith("DRAGOMIROVIC<<MILOS<<"))
+
+    def test_trims_extra_fillers_keeps_check_digit(self):
+        from kyc.extract import normalize_mrz
+        # a real gemma4-12b reply with one '<' too many before the composite check digit
+        got = normalize_mrz(["I<POLZK44172034<<<<<<<<<<<<<<<", "7909032M3201141POL<<<<<<<<<<<<4",
+                             "NOWAK<<TOMASZ<JAN<<<<<<<<<<<<<"])
+        self.assertEqual(got[1], "7909032M3201141POL<<<<<<<<<<<4")
+
+    def test_never_cuts_data(self):
+        from kyc.extract import normalize_mrz
+        self.assertEqual(normalize_mrz(["A" * 46, "B" * 44]), ["A" * 46, "B" * 44])
+
+
 if __name__ == "__main__":
     unittest.main()

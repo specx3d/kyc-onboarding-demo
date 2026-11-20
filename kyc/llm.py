@@ -8,7 +8,6 @@ import urllib.request
 from pathlib import Path
 
 URL = os.environ.get("KYC_LLM_URL", "http://127.0.0.1:8093/v1/chat/completions")
-OCR_MODEL = "surya-ocr"
 LLM_MODEL = "gemma4-12b"
 TIMEOUT = 900  # first call may load the model (2-4 min)
 
@@ -17,8 +16,18 @@ class LLMError(RuntimeError):
     pass
 
 
-def image_part(path):
-    b64 = base64.b64encode(Path(path).read_bytes()).decode()
+def image_part(path, crop=None):
+    """Image as a data URL. crop=0.7 sends only the bottom 30% of the image."""
+    if crop:
+        import io
+        from PIL import Image
+        im = Image.open(path).convert("RGB")
+        buf = io.BytesIO()
+        im.crop((0, int(im.size[1] * crop), im.size[0], im.size[1])).save(buf, "PNG")
+        data = buf.getvalue()
+    else:
+        data = Path(path).read_bytes()
+    b64 = base64.b64encode(data).decode()
     return {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}
 
 
@@ -27,6 +36,7 @@ def chat(model, messages, max_tokens=1500, no_think=True, timeout=TIMEOUT):
     if no_think:  # Gemma: disable thinking
         body["think"] = False
         body["chat_template_kwargs"] = {"enable_thinking": False}
+        body["reasoning_effort"] = "none"  # Ollama's OpenAI endpoint ignores "think"
     data = json.dumps(body).encode()
     last = None
     for attempt in (1, 2):  # retry once
@@ -45,12 +55,6 @@ def chat(model, messages, max_tokens=1500, no_think=True, timeout=TIMEOUT):
         if attempt == 1:
             time.sleep(2)
     raise LLMError(last)
-
-
-def ocr_image(path):
-    msgs = [{"role": "user", "content": [
-        {"type": "text", "text": "Extract all text from this image exactly as written."}, image_part(path)]}]
-    return chat(OCR_MODEL, msgs, max_tokens=2000, no_think=False)
 
 
 def parse_json_block(text):
