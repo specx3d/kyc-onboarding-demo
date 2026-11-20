@@ -1,0 +1,336 @@
+{
+ "s01_td3_deu.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "BRANDT",
+   "given_names": "ANNELIESE MARIE",
+   "document_number": "C01X00T47",
+   "nationality": "DEU",
+   "date_of_birth": "1985-04-12",
+   "sex": "F",
+   "expiry_date": "2031-06-30",
+   "issuing_country": "DEU"
+  },
+  "mrz_lines": [
+   "P<DEUBRANDT<<ANNELIESE<MARIE<<<<<<<<<<<<<<<<",
+   "C01X00T478DEU8504124F3106305<<<<<<<<<<<<<<04"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s02_td1_pol.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "NOWAK",
+   "given_names": "TOMASZ JAN",
+   "document_number": "ZK4417203",
+   "nationality": "POL",
+   "date_of_birth": "1979-09-03",
+   "sex": "M",
+   "expiry_date": "2032-01-14",
+   "issuing_country": "POL"
+  },
+  "mrz_lines": [
+   "I<POLZK44172034<<<<<<<<<<<<<<<",
+   "7909032M3201141POL<<<<<<<<<<<4",
+   "NOWAK<<TOMASZ<JAN<<<<<<<<<<<<<"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s03_td3_fra.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "DUBOIS",
+   "given_names": "CAMILLE",
+   "document_number": "19AB35742",
+   "nationality": "FRA",
+   "date_of_birth": "1992-01-28",
+   "sex": "F",
+   "expiry_date": "2033-03-09",
+   "issuing_country": "FRA"
+  },
+  "mrz_lines": [
+   "P<FRADUBOIS<<CAMILLE<<<<<<<<<<<<<<<<<<<<<<<<",
+   "19AB357428FRA9201280F3303090<<<<<<<<<<<<<<08"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s04_td1_esp.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "FERNÁNDEZ RUIZ",
+   "given_names": "LUCÍA",
+   "document_number": "XDA229481",
+   "nationality": "ESP",
+   "date_of_birth": "1990-07-19",
+   "sex": "F",
+   "expiry_date": "2030-11-02",
+   "issuing_country": "ESP"
+  },
+  "mrz_lines": [
+   "I<ESPXDA2294812<<<<<<<<<<<<<<<",
+   "9007194F3011021ESP<<<<<<<<<<<4",
+   "FERNANDEZ<RUIZ<<LUCIA<<<<<<<<<"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s05_td3_nld.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "DE VRIES",
+   "given_names": "JORIS",
+   "document_number": "NX5K9L2P7",
+   "nationality": "NLD",
+   "date_of_birth": "1983-12-05",
+   "sex": "M",
+   "expiry_date": "2029-08-21",
+   "issuing_country": "NLD"
+  },
+  "mrz_lines": [
+   "P<NLDDE<VRIES<<JORIS<<<<<<<<<<<<<<<<<<<<<<<<",
+   "NX5K9L2P79NLD8312055M2908214<<<<<<<<<<<<<<06"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s06_td1_ita.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "ROSSETTI",
+   "given_names": "GIULIA",
+   "document_number": "CA83120QZ",
+   "nationality": "ITA",
+   "date_of_birth": "1996-03-30",
+   "sex": "F",
+   "expiry_date": "2034-05-18",
+   "issuing_country": "ITA"
+  },
+  "mrz_lines": [
+   "I<ITACA83120QZ1<<<<<<<<<<<<<<<",
+   "9603301F3405189ITA<<<<<<<<<<<2",
+   "ROSSETTI<<GIULIA<<<<<<<<<<<<<<"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s07_td3_gbr.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "HARGREAVES",
+   "given_names": "OLIVER JAMES",
+   "document_number": "533019284",
+   "nationality": "GBR",
+   "date_of_birth": "1975-10-09",
+   "sex": "M",
+   "expiry_date": "2031-02-27",
+   "issuing_country": "GBR"
+  },
+  "mrz_lines": [
+   "P<GBRHARGREAVES<<OLIVER<JAMES<<<<<<<<<<<<<<<",
+   "5330192841GBR7510094M3102271<<<<<<<<<<<<<<04"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s08_td3_fra.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "LEFEBVRE",
+   "given_names": "ANTOINE",
+   "document_number": "12CD90871",
+   "nationality": "FRA",
+   "date_of_birth": "1970-02-14",
+   "sex": "M",
+   "expiry_date": "2023-05-21",
+   "issuing_country": "FRA"
+  },
+  "mrz_lines": [
+   "P<FRALEFEBVRE<<ANTOINE<<<<<<<<<<<<<<<<<<<<<<",
+   "12CD908711FRA7002140M2305215<<<<<<<<<<<<<<04"
+  ],
+  "issues": [
+   "expired"
+  ],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "reject"
+ },
+ "s09_td1_pol.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "ZIELINSKI",
+   "given_names": "MAREK",
+   "document_number": "ABC4821D1",
+   "nationality": "POL",
+   "date_of_birth": "1982-06-11",
+   "sex": "M",
+   "expiry_date": "2030-04-08",
+   "issuing_country": "POL"
+  },
+  "mrz_lines": [
+   "I<POLABC4821D12<<<<<<<<<<<<<<<",
+   "8206118M3004087POL<<<<<<<<<<<0",
+   "ZIELINSKI<<MAREK<<<<<<<<<<<<<<"
+  ],
+  "issues": [
+   "bad_check_digit"
+  ],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "reject"
+ },
+ "s10_td3_deu.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "SCHMIDT",
+   "given_names": "KLARA",
+   "document_number": "C22TR09KM",
+   "nationality": "DEU",
+   "date_of_birth": "1988-05-25",
+   "sex": "F",
+   "expiry_date": "2032-09-12",
+   "issuing_country": "DEU"
+  },
+  "mrz_lines": [
+   "P<DEUSCHMITZ<<KLARA<<<<<<<<<<<<<<<<<<<<<<<<<",
+   "C22TR09KM1DEU8805256F3209125<<<<<<<<<<<<<<04"
+  ],
+  "issues": [
+   "viz_mrz_mismatch"
+  ],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "refer to analyst"
+ },
+ "s11_td1_nld.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "JANSSEN",
+   "given_names": "PIETER",
+   "document_number": "SPNB04917",
+   "nationality": "NLD",
+   "date_of_birth": "1988-08-21",
+   "sex": "M",
+   "expiry_date": "2031-10-03",
+   "issuing_country": "NLD"
+  },
+  "mrz_lines": [
+   "I<NLDSPNB049178<<<<<<<<<<<<<<<",
+   "8808213M3110038NLD<<<<<<<<<<<8",
+   "JANSSEN<<PIETER<<<<<<<<<<<<<<<"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s12_td3_pol.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "ŁUKASZEWICZ",
+   "given_names": "AGNIESZKA",
+   "document_number": "EL7291044",
+   "nationality": "POL",
+   "date_of_birth": "1991-02-17",
+   "sex": "F",
+   "expiry_date": "2032-07-07",
+   "issuing_country": "POL"
+  },
+  "mrz_lines": [
+   "P<POLLUKASZEWICZ<<AGNIESZKA<<<<<<<<<<<<<<<<<",
+   "EL72910446POL9102170F3207073<<<<<<<<<<<<<<00"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "none",
+   "watchlist_id": null
+  },
+  "expected_status": "pass"
+ },
+ "s13_td1_srb.png": {
+  "doc_type": "TD1",
+  "fields": {
+   "surname": "DRAGOMIROVIC",
+   "given_names": "MILOS",
+   "document_number": "RS0048215",
+   "nationality": "SRB",
+   "date_of_birth": "1971-05-23",
+   "sex": "M",
+   "expiry_date": "2030-12-01",
+   "issuing_country": "SRB"
+  },
+  "mrz_lines": [
+   "I<SRBRS00482155<<<<<<<<<<<<<<<",
+   "7105236M3012017SRB<<<<<<<<<<<6",
+   "DRAGOMIROVIC<<MILOS<<<<<<<<<<<"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "true_match",
+   "watchlist_id": "W-001"
+  },
+  "expected_status": "refer to analyst"
+ },
+ "s14_td3_pol.png": {
+  "doc_type": "TD3",
+  "fields": {
+   "surname": "DRAGOMIROWICZ",
+   "given_names": "MILOSZ",
+   "document_number": "PL5583190",
+   "nationality": "POL",
+   "date_of_birth": "1988-11-02",
+   "sex": "M",
+   "expiry_date": "2033-06-15",
+   "issuing_country": "POL"
+  },
+  "mrz_lines": [
+   "P<POLDRAGOMIROWICZ<<MILOSZ<<<<<<<<<<<<<<<<<<",
+   "PL55831909POL8811020M3306150<<<<<<<<<<<<<<00"
+  ],
+  "issues": [],
+  "screening": {
+   "expected": "false_positive",
+   "watchlist_id": "W-001"
+  },
+  "expected_status": "pass"
+ }
+}

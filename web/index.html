@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KYC Onboarding Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#1c2430;--mut:#667085;--line:#e3e7ee;--navy:#1f3556;
+--ok:#12805c;--okbg:#e4f5ee;--bad:#b42318;--badbg:#fdecea;--warn:#9a6700;--warnbg:#fff3d6;--blue:#175cd3;--bluebg:#e8f0fe}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 "Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:24px}
+header h1{font-size:17px;margin:0;font-weight:600}
+nav button{background:none;border:0;color:#cdd7e6;font:inherit;padding:6px 12px;cursor:pointer;border-bottom:2px solid transparent}
+nav button.on{color:#fff;border-color:#fff}
+.mode{margin-left:auto;font-size:12px;padding:3px 10px;border-radius:10px;background:#ffffff22}
+main{display:grid;grid-template-columns:330px 1fr;gap:18px;padding:18px 24px;max-width:1500px;margin:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:0 0 10px}
+.item{padding:10px 12px;border:1px solid var(--line);border-radius:6px;margin-bottom:8px;cursor:pointer;background:#fff}
+.item:hover{border-color:#9db3d4}.item.sel{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy)}
+.item .n{font-weight:600}.item .m{color:var(--mut);font-size:12px;margin-top:2px}
+.badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:12px;font-weight:600}
+.pass,.b-pass{background:var(--okbg);color:var(--ok)}.reject,.b-fail{background:var(--badbg);color:var(--bad)}
+.refer,.b-skip{background:var(--warnbg);color:var(--warn)}.b-info{background:var(--bluebg);color:var(--blue)}
+.grid{display:grid;grid-template-columns:minmax(300px,1fr) 1fr;gap:16px}
+@media(max-width:1100px){main,.grid{grid-template-columns:1fr}}
+img.doc{width:100%;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%}td,th{padding:5px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:12px}
+.chk{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line)}
+.dot{flex:none;width:18px;height:18px;border-radius:50%;color:#fff;font-size:11px;text-align:center;line-height:18px;margin-top:1px}
+.dot.pass{background:var(--ok)}.dot.fail{background:var(--bad)}.dot.skip{background:#98a2b3}
+.chk .r{color:var(--mut);font-size:12px}
+.hit{border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:6px;padding:12px;margin-bottom:10px}
+.hit.esc{border-left-color:var(--bad)}
+.chip{display:inline-block;background:#eef1f6;border-radius:4px;padding:1px 7px;margin-right:4px;font-size:12px;font-weight:600}
+.note{background:var(--badbg);color:var(--bad);padding:6px 10px;border-radius:5px;margin-top:8px;font-size:13px}
+.actions button{padding:8px 18px;border:0;border-radius:6px;font:inherit;font-weight:600;cursor:pointer;color:#fff;margin-right:8px}
+.a-approve{background:var(--ok)}.a-reject{background:var(--bad)}.a-escalate{background:var(--warn)}
+textarea,input[type=text]{width:100%;font:inherit;padding:7px;border:1px solid #c9d1dd;border-radius:6px;margin:4px 0 10px}
+.mut{color:var(--mut)}.err{color:var(--bad);margin-left:6px}
+pre{background:#f6f8fb;padding:8px;border-radius:6px;font:12px Consolas,monospace;overflow:auto;white-space:pre-wrap}
+.bar{height:8px;background:#e8ecf2;border-radius:4px;overflow:hidden;width:120px;display:inline-block;vertical-align:middle}
+.bar i{display:block;height:100%;background:var(--navy)}
+</style>
+</head>
+<body>
+<header>
+  <h1>KYC Onboarding Review</h1>
+  <nav><button id="t-cases" class="on">Cases</button><button id="t-audit">Audit log</button></nav>
+  <span class="mode" id="mode"></span>
+</header>
+<main id="cases">
+  <div><div class="card"><h2>Documents</h2><div id="list"></div></div></div>
+  <div id="detail"><div class="card mut">Select a document.</div></div>
+</main>
+<main id="audit" style="display:none;grid-template-columns:1fr">
+  <div class="card"><h2>Decision audit log</h2><div id="auditbody"></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const stCls=s=>s==="pass"?"pass":s==="reject"?"reject":"refer";
+const recCls=r=>r==="likely_false_positive"?"b-pass":r==="likely_true_match"?"b-fail":"b-skip";
+let current=null,analyst="demo.analyst";
+
+async function j(u,o){const r=await fetch(u,o);return r.json()}
+async function loadList(){
+  const docs=await j("/api/documents");
+  $("#list").innerHTML=docs.map(d=>`<div class="item ${d.filename===current?"sel":""}" data-f="${esc(d.filename)}">
+    <div class="n">${esc(d.name)}</div>
+    <div class="m">${esc(d.doc_type)} · ${esc(d.filename)}</div>
+    <div style="margin-top:6px"><span class="badge ${stCls(d.status)}">${esc(d.status)}</span>
+    ${d.hits?`<span class="badge b-info">${d.hits} hit${d.hits>1?"s":""}</span>`:""}
+    ${d.decision?`<span class="badge b-info">decided: ${esc(d.decision)}</span>`:""}</div></div>`).join("");
+  document.querySelectorAll(".item").forEach(e=>e.onclick=()=>open(e.dataset.f));
+}
+function hitHtml(h){
+  const t=h.triage,esc_=h.rules.mandatory_escalation;
+  return `<div class="hit ${esc_?"esc":""}">
+   <b>${esc(h.watchlist_id)} · ${esc(h.watchlist_name)}</b> <span class="mut">(matched on ${esc(h.matched_on)}: ${esc(h.matched_name)}; ${esc(h.program)})</span>
+   <div style="margin:6px 0">Total score <b>${h.total}</b> <span class="bar"><i style="width:${h.total}%"></i></span></div>
+   <table><tr><th>Component</th><th>Detail</th><th>Points</th></tr>
+    <tr><td>Name similarity</td><td>${h.name_score}% × 0.7</td><td>${h.name_points}</td></tr>
+    <tr><td>Date of birth</td><td>${esc(h.dob_status)} (list: ${esc(h.watch_dob||"?")})</td><td>${h.dob_points>0?"+":""}${h.dob_points}</td></tr>
+    <tr><td>Nationality</td><td>${esc(h.nationality_status)} (list: ${esc(h.watch_nationality||"?")})</td><td>${h.nationality_points>0?"+":""}${h.nationality_points}</td></tr></table>
+   <div style="margin-top:8px" class="mut">Procedure rules: ${esc(h.rules.explanation)} ${h.rules.sections.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
+   <div style="margin-top:8px"><b>AI recommendation:</b> <span class="badge ${recCls(t.recommendation)}">${esc(t.recommendation)}</span>
+     ${t.cited_sections.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
+   <div style="margin-top:4px">${esc(t.rationale)}</div>
+   <div class="mut" style="font-size:12px">Fields used: ${esc((t.fields_used||[]).join(", ")||"-")} · advisory only, never closes a case</div>
+   ${t.guardrail_notes.map(n=>`<div class="note">${esc(n)}${t.raw_recommendation?` (model said: ${esc(t.raw_recommendation)})`:""}</div>`).join("")}
+  </div>`;
+}
+async function open(fn){
+  current=fn;loadList();
+  const r=await j("/api/document/"+encodeURIComponent(fn));
+  const ex=r.extracted;
+  const fields=[["Surname","surname"],["Given names","given_names"],["Document no.","document_number"],["Nationality","nationality"],["Date of birth","date_of_birth"],["Sex","sex"],["Expiry","expiry_date"],["Issuing country","issuing_country"]];
+  $("#detail").innerHTML=`
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center">
+    <div><b style="font-size:16px">${esc(ex.given_names)} ${esc(ex.surname)}</b> <span class="mut">· ${esc(r.doc_type)} · ${esc(r.filename)}</span></div>
+    <div>Proposed outcome: <span class="badge ${stCls(r.overall.status)}">${esc(r.overall.status)}</span></div></div>
+    <ul style="margin:8px 0 0 18px;padding:0">${r.overall.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+    <div class="mut" style="margin-top:6px;font-size:12px">A human decision is always required. Models: OCR ${esc(r.models.ocr)}, LLM ${esc(r.models.llm)}.</div></div>
+  <div class="grid">
+    <div><div class="card"><h2>Document image</h2><img class="doc" src="/image/${encodeURIComponent(fn)}"></div>
+      <div class="card"><h2>MRZ (as extracted)</h2><pre>${esc((ex.mrz_lines||[]).join("\n"))}</pre></div></div>
+    <div>
+      <div class="card"><h2>Extracted fields</h2><table>${fields.map(([l,k])=>`<tr><th>${l}</th><td>${esc(ex[k])}</td></tr>`).join("")}</table></div>
+      <div class="card"><h2>Deterministic checks</h2>${r.checks.map(c=>`<div class="chk"><span class="dot ${c.status}">${c.status==="pass"?"✓":c.status==="fail"?"✕":"–"}</span>
+        <div>${esc(c.label)}<div class="r">${esc(c.reason)}</div></div></div>`).join("")}</div>
+    </div></div>
+  <div class="card"><h2>Sanctions screening</h2>${r.hits.length?r.hits.map(hitHtml).join(""):'<span class="mut">No hits above the reporting threshold (80).</span>'}</div>
+  <div class="card"><h2>Analyst decision</h2>
+    <label class="mut">Analyst</label><input type="text" id="who" value="${esc(analyst)}">
+    <label class="mut">Comment (required, documented in the audit log)</label><textarea id="cm" rows="3"></textarea>
+    <div class="actions"><button class="a-approve" data-d="approve">Approve</button><button class="a-reject" data-d="reject">Reject</button><button class="a-escalate" data-d="escalate">Escalate</button><span class="err" id="err"></span></div>
+    ${r.decisions.length?`<h2 style="margin-top:16px">Previous decisions</h2>`+r.decisions.map(d=>`<div class="mut">${esc(d.decided_at)} · ${esc(d.decided_by)} · <b>${esc(d.decision)}</b> · ${esc(d.comment)}</div>`).join(""):""}
+  </div>`;
+  document.querySelectorAll(".actions button").forEach(b=>b.onclick=async()=>{
+    analyst=$("#who").value;
+    const res=await j("/api/decision",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({filename:fn,decision:b.dataset.d,comment:$("#cm").value,decided_by:analyst})});
+    if(res.error){$("#err").textContent=res.error;return}
+    open(fn);
+  });
+}
+async function loadAudit(){
+  const a=await j("/api/audit");
+  $("#auditbody").innerHTML=a.length?`<table><tr><th>When (UTC)</th><th>Who</th><th>Document</th><th>Decision</th><th>AI recommendation</th><th>AI rationale</th><th>Analyst comment</th><th>Models</th></tr>`+
+   a.map(d=>`<tr><td>${esc(d.decided_at)}</td><td>${esc(d.decided_by)}</td><td>${esc(d.filename)}</td><td><b>${esc(d.decision)}</b></td><td>${esc(d.ai_recommendation)}</td><td>${esc(d.ai_rationale)}</td><td>${esc(d.comment)}</td><td class="mut">${esc(d.model_versions)}</td></tr>`).join("")+`</table>`:'<span class="mut">No decisions recorded yet.</span>';
+}
+function tab(t){
+  $("#cases").style.display=t==="cases"?"grid":"none";$("#audit").style.display=t==="audit"?"grid":"none";
+  $("#t-cases").className=t==="cases"?"on":"";$("#t-audit").className=t==="audit"?"on":"";
+  if(t==="audit")loadAudit();else loadList();
+}
+$("#t-cases").onclick=()=>tab("cases");$("#t-audit").onclick=()=>tab("audit");
+j("/api/info").then(i=>$("#mode").textContent=i.mode==="mock"?"MOCK MODE (no AI models)":"LIVE · local models");
+loadList();
+</script>
+</body>
+</html>
