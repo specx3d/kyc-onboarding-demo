@@ -67,7 +67,14 @@ python -m venv .venv
 
 Without `--mock` the pipeline calls `POST http://127.0.0.1:8093/v1/chat/completions` with `gemma4-12b`
 (Gemma 4 12B, 4-bit, on one RTX 5070 12 GB) for reading the image and for triage. The first call can take minutes while a model loads (timeout 900 s,
-one retry). Override the URL with the `KYC_LLM_URL` environment variable.
+one retry). Override the URL and model name with `KYC_LLM_URL` and `KYC_LLM_MODEL`. With plain Ollama:
+
+```
+ollama pull gemma4:12b-it-qat
+set KYC_LLM_URL=http://127.0.0.1:11434/v1/chat/completions
+set KYC_LLM_MODEL=gemma4:12b-it-qat
+.venv\Scripts\python evaluate.py
+```
 
 `--mock` is deterministic and needs no network: a simulated OCR text and the extraction come from the ground truth. The mock triage
 model is **deliberately over-confident on one pattern** (identical name and exact date of birth -> "false positive")

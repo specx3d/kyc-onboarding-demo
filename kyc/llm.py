@@ -8,7 +8,7 @@ import urllib.request
 from pathlib import Path
 
 URL = os.environ.get("KYC_LLM_URL", "http://127.0.0.1:8093/v1/chat/completions")
-LLM_MODEL = "gemma4-12b"
+LLM_MODEL = os.environ.get("KYC_LLM_MODEL", "gemma4-12b")
 TIMEOUT = 900  # first call may load the model (2-4 min)
 
 
